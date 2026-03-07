@@ -33,6 +33,10 @@ export interface ExerciseResponse {
   orderIndex: number;
   instructionText: string;
   createdAt: string;
+  imagePath: string | null;
+  imageOriginalName: string | null;
+  imageContentType: string | null;
+  imageSizeBytes: number | null;
 }
 
 export interface CreateAssignmentRequest {
@@ -67,12 +71,20 @@ export class ApiService {
     return this.http.get<HomeworkResponse[]>(`${this.baseUrl}/api/v1/teacher/homeworks`);
   }
 
-  addExercise(homeworkId: number, body: CreateExerciseRequest) {
-    return this.http.post<ExerciseResponse>(
-      `${this.baseUrl}/api/v1/teacher/homeworks/${homeworkId}/exercises`,
-      body
-    );
+  addExercise(homeworkId: number, orderIndex: number, instructionText: string, imageFile?: File | null) {
+  const formData = new FormData();
+  formData.append('orderIndex', String(orderIndex));
+  formData.append('instructionText', instructionText);
+
+  if (imageFile) {
+    formData.append('image', imageFile);
   }
+
+  return this.http.post<any>(
+    `${this.baseUrl}/api/v1/teacher/homeworks/${homeworkId}/exercises`,
+    formData
+  );
+}
 
   getExercises(homeworkId: number) {
     return this.http.get<ExerciseResponse[]>(

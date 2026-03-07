@@ -180,6 +180,32 @@ pre {
   line-height: 1.5;
 }
 
+.exercise-image-link {
+  display: inline-block;
+  margin-top: 12px;
+  text-decoration: none;
+}
+
+.exercise-image-link img.exercise-image-thumb {
+  display: block;
+  width: 140px !important;
+  height: 100px !important;
+  max-width: 140px !important;
+  min-width: 140px !important;
+  max-height: 100px !important;
+  object-fit: cover !important;
+  border-radius: 12px;
+  border: 1px solid rgba(67, 89, 125, 0.14);
+  box-shadow: 0 8px 20px rgba(43, 50, 64, 0.12);
+  background: rgba(255, 255, 255, 0.6);
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.exercise-image-link img.exercise-image-thumb:hover {
+  transform: scale(1.02);
+  opacity: 0.96;
+}
+
 @media (max-width: 768px) {
   .page-card {
     padding: 28px 22px;
@@ -201,5 +227,13 @@ pre {
 
   .homework-title {
     font-size: 18px;
+  }
+
+  .exercise-image-link img.exercise-image-thumb {
+    width: 120px !important;
+    height: 88px !important;
+    max-width: 120px !important;
+    min-width: 120px !important;
+    max-height: 88px !important;
   }
 }

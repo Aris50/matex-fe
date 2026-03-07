@@ -16,7 +16,12 @@ describe('TeacherAddExercise', () => {
                 id: 1,
                 homeworkId: 1,
                 orderIndex: 1,
-                instructionText: 'Solve equation x + 2 = 5'
+                instructionText: 'Solve equation x + 2 = 5',
+                createdAt: '2026-03-07T20:00:00Z',
+                imagePath: 'exercises/1/test.png',
+                imageOriginalName: 'test.png',
+                imageContentType: 'image/png',
+                imageSizeBytes: 12345
               })
           }
         }

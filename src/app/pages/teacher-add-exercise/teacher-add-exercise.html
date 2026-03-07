@@ -7,7 +7,7 @@
 
     <h1>Add Exercise</h1>
     <p class="subtitle">
-      Add an ordered exercise to an existing homework.
+      Add an ordered exercise to an existing homework, optionally with one image.
     </p>
 
     <div class="form-grid">
@@ -24,6 +24,11 @@
       <label class="full-width">
         <span>Instruction Text</span>
         <textarea rows="6" [(ngModel)]="instructionText"></textarea>
+      </label>
+
+      <label class="full-width">
+        <span>Exercise Image (optional)</span>
+        <input type="file" accept="image/*" (change)="onFileSelected($event)" />
       </label>
     </div>
 

@@ -44,7 +44,10 @@
             Loading exercises...
           </div>
 
-          <div *ngIf="!loadingExercisesByHomeworkId[hw.id] && exercisesByHomeworkId[hw.id]?.length === 0" class="info-box">
+          <div
+            *ngIf="!loadingExercisesByHomeworkId[hw.id] && exercisesByHomeworkId[hw.id]?.length === 0"
+            class="info-box"
+          >
             No exercises yet.
           </div>
 
@@ -55,6 +58,20 @@
             <div class="exercise-item" *ngFor="let ex of exercisesByHomeworkId[hw.id]">
               <div class="exercise-order">Exercise {{ ex.orderIndex }}</div>
               <div class="exercise-text">{{ ex.instructionText }}</div>
+
+              <a
+                *ngIf="ex.imagePath"
+                [href]="buildExerciseImageUrl(ex.imagePath)"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="exercise-image-link"
+              >
+                <img
+                  class="exercise-image-thumb"
+                  [src]="buildExerciseImageUrl(ex.imagePath)"
+                  [alt]="ex.imageOriginalName || 'Exercise image'"
+                />
+              </a>
             </div>
           </div>
         </div>

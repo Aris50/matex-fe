@@ -6,6 +6,7 @@ import {
   HomeworkResponse,
   ExerciseResponse
 } from '../../api.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-teacher-view-homeworks',
@@ -72,5 +73,12 @@ export class TeacherViewHomeworks {
         this.cdr.detectChanges();
       }
     });
+  }
+
+  buildExerciseImageUrl(imagePath: string | null | undefined): string {
+    if (!imagePath) {
+      return '';
+    }
+    return `${environment.apiBaseUrl}/storage/${imagePath}`;
   }
 }

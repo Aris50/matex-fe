@@ -2,7 +2,7 @@ import { Component, ChangeDetectorRef } from '@angular/core';
 import { CommonModule, JsonPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { ApiService, CreateExerciseRequest } from '../../api.service';
+import { ApiService } from '../../api.service';
 
 @Component({
   selector: 'app-teacher-add-exercise',
@@ -15,6 +15,7 @@ export class TeacherAddExercise {
   homeworkId = 1;
   orderIndex = 1;
   instructionText = '';
+  selectedImage: File | null = null;
 
   loading = false;
   errorText: string | null = null;
@@ -22,17 +23,22 @@ export class TeacherAddExercise {
 
   constructor(private api: ApiService, private cdr: ChangeDetectorRef) {}
 
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.selectedImage = input.files && input.files.length > 0 ? input.files[0] : null;
+  }
+
   addExercise() {
     this.loading = true;
     this.errorText = null;
     this.createdExercise = null;
 
-    const payload: CreateExerciseRequest = {
-      orderIndex: this.orderIndex,
-      instructionText: this.instructionText
-    };
-
-    this.api.addExercise(this.homeworkId, payload).subscribe({
+    this.api.addExercise(
+      this.homeworkId,
+      this.orderIndex,
+      this.instructionText,
+      this.selectedImage
+    ).subscribe({
       next: (res) => {
         this.createdExercise = res;
         this.loading = false;
