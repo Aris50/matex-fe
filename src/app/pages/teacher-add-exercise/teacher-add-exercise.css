@@ -1,0 +1,54 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  font-family: Inter, Arial, sans-serif;
+  background: linear-gradient(135deg, #2B3240 0%, #43597D 45%, #A0BFD7 100%);
+}
+
+.page-shell {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+}
+
+.page-card {
+  width: 100%;
+  max-width: 720px;
+  background: rgba(228, 250, 252, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 28px;
+  padding: 40px;
+  box-shadow: 0 20px 60px rgba(43, 50, 64, 0.28);
+}
+
+.back-btn {
+  display: inline-block;
+  margin-bottom: 16px;
+  text-decoration: none;
+  color: #43597D;
+  font-weight: 700;
+}
+
+.badge {
+  display: inline-block;
+  background: #43597D;
+  color: #E4FAFC;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 18px;
+}
+
+h1 {
+  margin: 0 0 12px 0;
+  color: #2B3240;
+}
+
+p {
+  margin: 0;
+  color: #43597D;
+  font-size: 16px;
+}

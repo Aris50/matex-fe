@@ -1,0 +1,51 @@
+<div class="page-shell">
+  <div class="form-card">
+    <div class="top-row">
+      <a routerLink="/" class="back-btn">← Back</a>
+      <div class="badge">MateX</div>
+    </div>
+
+    <h1>Create Homework</h1>
+    <p class="subtitle">
+      Set up a reusable homework with title, description, and due date.
+    </p>
+
+    <div class="form-grid">
+      <label>
+        <span>Teacher ID</span>
+        <input type="number" [(ngModel)]="teacherId" />
+      </label>
+
+      <label>
+        <span>Title</span>
+        <input type="text" [(ngModel)]="title" />
+      </label>
+
+      <label class="full-width">
+        <span>Description</span>
+        <textarea rows="5" [(ngModel)]="description"></textarea>
+      </label>
+
+      <label>
+        <span>Due At</span>
+        <input type="datetime-local" [(ngModel)]="dueAt" />
+      </label>
+    </div>
+
+    <div class="actions">
+      <button (click)="createHomework()" [disabled]="loading">
+        {{ loading ? 'Creating...' : 'Create Homework' }}
+      </button>
+    </div>
+
+    <div *ngIf="createdHomework" class="result-box success-box">
+      <h3>Created Homework</h3>
+      <pre>{{ createdHomework | json }}</pre>
+    </div>
+
+    <div *ngIf="errorText" class="result-box error-box">
+      <h3>Error</h3>
+      <pre>{{ errorText }}</pre>
+    </div>
+  </div>
+</div>

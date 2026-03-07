@@ -1,0 +1,11 @@
+<h2>Backend health</h2>
+
+<ng-container *ngIf="vm$ | async as vm">
+  <p *ngIf="vm.state === 'loading'">Backend health: <b>loading...</b></p>
+
+  <p *ngIf="vm.state === 'ok'">Backend health: <b>{{ vm.status }}</b></p>
+
+  <pre *ngIf="vm.state === 'error'" style="color: red;">
+{{ vm.error | json }}
+  </pre>
+</ng-container>
