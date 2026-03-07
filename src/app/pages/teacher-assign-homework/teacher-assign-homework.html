@@ -1,8 +1,41 @@
 <div class="page-shell">
   <div class="page-card">
-    <a routerLink="/" class="back-btn">← Back</a>
-    <div class="badge">MateX · Teacher</div>
+    <div class="top-row">
+      <a routerLink="/" class="back-btn">← Back</a>
+      <div class="badge">MateX · Teacher</div>
+    </div>
+
     <h1>Assign Homework</h1>
-    <p>This page is the next step after Add Exercise. We will implement it soon.</p>
+    <p class="subtitle">
+      Assign an existing homework to one or more students.
+    </p>
+
+    <div class="form-grid">
+      <label>
+        <span>Homework ID</span>
+        <input type="number" [(ngModel)]="homeworkId" />
+      </label>
+
+      <label class="full-width">
+        <span>Student IDs (comma-separated)</span>
+        <input type="text" [(ngModel)]="studentIdsText" placeholder="e.g. 2,3,5" />
+      </label>
+    </div>
+
+    <div class="actions">
+      <button (click)="assignHomework()" [disabled]="loading">
+        {{ loading ? 'Assigning...' : 'Assign Homework' }}
+      </button>
+    </div>
+
+    <div *ngIf="createdAssignments" class="result-box success-box">
+      <h3>Created Assignments</h3>
+      <pre>{{ createdAssignments | json }}</pre>
+    </div>
+
+    <div *ngIf="errorText" class="result-box error-box">
+      <h3>Error</h3>
+      <pre>{{ errorText }}</pre>
+    </div>
   </div>
 </div>

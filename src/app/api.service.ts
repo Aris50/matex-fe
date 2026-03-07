@@ -27,6 +27,18 @@ export interface CreateExerciseRequest {
   instructionText: string;
 }
 
+export interface CreateAssignmentRequest {
+  studentIds: number[];
+}
+
+export interface AssignmentResponse {
+  id: number;
+  homeworkId: number;
+  studentId: number;
+  status: string;
+  assignedAt: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -46,6 +58,13 @@ export class ApiService {
   addExercise(homeworkId: number, body: CreateExerciseRequest) {
     return this.http.post<any>(
       `${this.baseUrl}/api/v1/teacher/homeworks/${homeworkId}/exercises`,
+      body
+    );
+  }
+
+  assignHomework(homeworkId: number, body: CreateAssignmentRequest) {
+    return this.http.post<AssignmentResponse[]>(
+      `${this.baseUrl}/api/v1/teacher/homeworks/${homeworkId}/assignments`,
       body
     );
   }

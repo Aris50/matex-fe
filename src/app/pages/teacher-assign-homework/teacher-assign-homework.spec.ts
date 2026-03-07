@@ -1,22 +1,34 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { TestBed } from '@angular/core/testing';
 import { TeacherAssignHomework } from './teacher-assign-homework';
+import { ApiService } from '../../api.service';
+import { of } from 'rxjs';
 
 describe('TeacherAssignHomework', () => {
-  let component: TeacherAssignHomework;
-  let fixture: ComponentFixture<TeacherAssignHomework>;
-
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [TeacherAssignHomework],
+      providers: [
+        {
+          provide: ApiService,
+          useValue: {
+            assignHomework: () =>
+              of([
+                {
+                  id: 1,
+                  homeworkId: 1,
+                  studentId: 2,
+                  status: 'ASSIGNED',
+                  assignedAt: '2026-03-07T20:00:00Z'
+                }
+              ])
+          }
+        }
+      ]
     }).compileComponents();
-
-    fixture = TestBed.createComponent(TeacherAssignHomework);
-    component = fixture.componentInstance;
-    await fixture.whenStable();
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    const fixture = TestBed.createComponent(TeacherAssignHomework);
+    expect(fixture.componentInstance).toBeTruthy();
   });
 });
