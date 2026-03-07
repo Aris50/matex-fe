@@ -1,0 +1,64 @@
+<div class="page-shell">
+  <div class="page-card">
+    <div class="top-row">
+      <a routerLink="/" class="back-btn">← Back</a>
+      <div class="badge">MateX · Teacher</div>
+    </div>
+
+    <h1>View Homeworks</h1>
+    <p class="subtitle">
+      Browse all homeworks currently in the database and expand each one to see its exercises.
+    </p>
+
+    <div *ngIf="loading" class="info-box">Loading homeworks...</div>
+
+    <div *ngIf="errorText" class="result-box error-box">
+      <h3>Error</h3>
+      <pre>{{ errorText }}</pre>
+    </div>
+
+    <div *ngIf="!loading && homeworks.length === 0" class="info-box">
+      No homeworks found.
+    </div>
+
+    <div class="homework-list" *ngIf="!loading && homeworks.length > 0">
+      <div class="homework-item" *ngFor="let hw of homeworks">
+        <button class="homework-header" (click)="toggleHomework(hw.id)">
+          <div class="header-left">
+            <div class="homework-title">{{ hw.title }}</div>
+            <div class="homework-meta">
+              ID: {{ hw.id }} · Teacher: {{ hw.teacherId }} · Due: {{ hw.dueAt || '—' }}
+            </div>
+          </div>
+          <div class="expand-indicator">
+            {{ expandedHomeworkId === hw.id ? '−' : '+' }}
+          </div>
+        </button>
+
+        <div class="homework-body" *ngIf="expandedHomeworkId === hw.id">
+          <p class="homework-description">
+            {{ hw.description || 'No description.' }}
+          </p>
+
+          <div *ngIf="loadingExercisesByHomeworkId[hw.id]" class="info-box">
+            Loading exercises...
+          </div>
+
+          <div *ngIf="!loadingExercisesByHomeworkId[hw.id] && exercisesByHomeworkId[hw.id]?.length === 0" class="info-box">
+            No exercises yet.
+          </div>
+
+          <div
+            class="exercise-list"
+            *ngIf="!loadingExercisesByHomeworkId[hw.id] && exercisesByHomeworkId[hw.id]?.length"
+          >
+            <div class="exercise-item" *ngFor="let ex of exercisesByHomeworkId[hw.id]">
+              <div class="exercise-order">Exercise {{ ex.orderIndex }}</div>
+              <div class="exercise-text">{{ ex.instructionText }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

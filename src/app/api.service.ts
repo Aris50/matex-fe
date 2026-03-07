@@ -27,6 +27,14 @@ export interface CreateExerciseRequest {
   instructionText: string;
 }
 
+export interface ExerciseResponse {
+  id: number;
+  homeworkId: number;
+  orderIndex: number;
+  instructionText: string;
+  createdAt: string;
+}
+
 export interface CreateAssignmentRequest {
   studentIds: number[];
 }
@@ -55,10 +63,20 @@ export class ApiService {
     return this.http.post<HomeworkResponse>(`${this.baseUrl}/api/v1/teacher/homeworks`, body);
   }
 
+  getAllHomeworks() {
+    return this.http.get<HomeworkResponse[]>(`${this.baseUrl}/api/v1/teacher/homeworks`);
+  }
+
   addExercise(homeworkId: number, body: CreateExerciseRequest) {
-    return this.http.post<any>(
+    return this.http.post<ExerciseResponse>(
       `${this.baseUrl}/api/v1/teacher/homeworks/${homeworkId}/exercises`,
       body
+    );
+  }
+
+  getExercises(homeworkId: number) {
+    return this.http.get<ExerciseResponse[]>(
+      `${this.baseUrl}/api/v1/teacher/homeworks/${homeworkId}/exercises`
     );
   }
 
