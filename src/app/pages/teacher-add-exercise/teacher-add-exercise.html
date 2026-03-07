@@ -1,9 +1,46 @@
-<p>teacher-add-exercise works!</p>
 <div class="page-shell">
   <div class="page-card">
-    <a routerLink="/" class="back-btn">← Back</a>
-    <div class="badge">MateX · Teacher</div>
+    <div class="top-row">
+      <a routerLink="/" class="back-btn">← Back</a>
+      <div class="badge">MateX · Teacher</div>
+    </div>
+
     <h1>Add Exercise</h1>
-    <p>This page is the next step. We will implement it next.</p>
+    <p class="subtitle">
+      Add an ordered exercise to an existing homework.
+    </p>
+
+    <div class="form-grid">
+      <label>
+        <span>Homework ID</span>
+        <input type="number" [(ngModel)]="homeworkId" />
+      </label>
+
+      <label>
+        <span>Order Index</span>
+        <input type="number" [(ngModel)]="orderIndex" />
+      </label>
+
+      <label class="full-width">
+        <span>Instruction Text</span>
+        <textarea rows="6" [(ngModel)]="instructionText"></textarea>
+      </label>
+    </div>
+
+    <div class="actions">
+      <button (click)="addExercise()" [disabled]="loading">
+        {{ loading ? 'Adding...' : 'Add Exercise' }}
+      </button>
+    </div>
+
+    <div *ngIf="createdExercise" class="result-box success-box">
+      <h3>Created Exercise</h3>
+      <pre>{{ createdExercise | json }}</pre>
+    </div>
+
+    <div *ngIf="errorText" class="result-box error-box">
+      <h3>Error</h3>
+      <pre>{{ errorText }}</pre>
+    </div>
   </div>
 </div>

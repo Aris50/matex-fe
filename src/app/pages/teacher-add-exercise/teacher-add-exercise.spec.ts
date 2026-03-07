@@ -1,11 +1,31 @@
-import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { TestBed } from '@angular/core/testing';
+import { TeacherAddExercise } from './teacher-add-exercise';
+import { ApiService } from '../../api.service';
+import { of } from 'rxjs';
 
-@Component({
-  selector: 'app-teacher-add-exercise',
-  standalone: true,
-  imports: [RouterLink],
-  templateUrl: './teacher-add-exercise.html',
-  styleUrl: './teacher-add-exercise.css'
-})
-export class TeacherAddExercise {}
+describe('TeacherAddExercise', () => {
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TeacherAddExercise],
+      providers: [
+        {
+          provide: ApiService,
+          useValue: {
+            addExercise: () =>
+              of({
+                id: 1,
+                homeworkId: 1,
+                orderIndex: 1,
+                instructionText: 'Solve equation x + 2 = 5'
+              })
+          }
+        }
+      ]
+    }).compileComponents();
+  });
+
+  it('should create', () => {
+    const fixture = TestBed.createComponent(TeacherAddExercise);
+    expect(fixture.componentInstance).toBeTruthy();
+  });
+});

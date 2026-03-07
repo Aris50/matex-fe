@@ -22,6 +22,11 @@ export interface HomeworkResponse {
   createdAt: string;
 }
 
+export interface CreateExerciseRequest {
+  orderIndex: number;
+  instructionText: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -31,12 +36,17 @@ export class ApiService {
   constructor(private http: HttpClient) {}
 
   health() {
-    const url = `${this.baseUrl}/api/v1/health`;
-    return this.http.get<HealthResponse>(url);
+    return this.http.get<HealthResponse>(`${this.baseUrl}/api/v1/health`);
   }
 
   createHomework(body: CreateHomeworkRequest) {
-    const url = `${this.baseUrl}/api/v1/teacher/homeworks`;
-    return this.http.post<HomeworkResponse>(url, body);
+    return this.http.post<HomeworkResponse>(`${this.baseUrl}/api/v1/teacher/homeworks`, body);
+  }
+
+  addExercise(homeworkId: number, body: CreateExerciseRequest) {
+    return this.http.post<any>(
+      `${this.baseUrl}/api/v1/teacher/homeworks/${homeworkId}/exercises`,
+      body
+    );
   }
 }
