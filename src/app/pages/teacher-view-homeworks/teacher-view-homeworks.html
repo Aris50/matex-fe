@@ -21,6 +21,12 @@
       No homeworks found.
     </div>
 
+    <div class="show-more-row">
+      <button class="show-more-btn" (click)="toggleShowAll()">
+        {{ showAllHomeworks ? 'Show recent only' : 'Show all homeworks' }}
+      </button>
+    </div>
+
     <div class="homework-list" *ngIf="!loading && homeworks.length > 0">
       <div class="homework-item" *ngFor="let hw of homeworks">
         <button class="homework-header" (click)="toggleHomework(hw.id)">

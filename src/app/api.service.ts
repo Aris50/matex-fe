@@ -121,6 +121,23 @@ export interface SubmissionCreatedResponse {
   fileIds: number[];
 }
 
+// --- Owner account management ---
+
+export interface CreateAccountRequest {
+  email: string;
+  password: string;
+  fullName: string;
+  role: 'STUDENT' | 'TEACHER';
+}
+
+export interface AccountResponse {
+  id: number;
+  email: string;
+  fullName: string;
+  role: string;
+  createdAt: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -137,8 +154,9 @@ export class ApiService {
     return this.http.post<HomeworkResponse>(`${this.baseUrl}/api/v1/teacher/homeworks`, body);
   }
 
-  getAllHomeworks() {
-    return this.http.get<HomeworkResponse[]>(`${this.baseUrl}/api/v1/teacher/homeworks`);
+  getAllHomeworks(recentOnly: boolean = false) {
+    const params = recentOnly ? '?recentOnly=true' : '';
+    return this.http.get<HomeworkResponse[]>(`${this.baseUrl}/api/v1/teacher/homeworks${params}`);
   }
 
   addExercise(homeworkId: number, instructionText: string, imageFile?: File | null) {
@@ -208,5 +226,19 @@ export class ApiService {
       `${this.baseUrl}/api/v1/student/assignments/${assignmentId}/exercises/${exerciseId}/submissions`,
       formData
     );
+  }
+
+  // --- Owner endpoints ---
+
+  createAccount(body: CreateAccountRequest) {
+    return this.http.post<AccountResponse>(`${this.baseUrl}/api/v1/owner/accounts`, body);
+  }
+
+  listAccounts() {
+    return this.http.get<AccountResponse[]>(`${this.baseUrl}/api/v1/owner/accounts`);
+  }
+
+  deleteAccount(id: number) {
+    return this.http.delete(`${this.baseUrl}/api/v1/owner/accounts/${id}`);
   }
 }

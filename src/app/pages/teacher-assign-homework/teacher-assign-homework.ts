@@ -26,6 +26,7 @@ export class TeacherAssignHomework implements OnInit {
 
   showHomeworkPicker = false;
   showStudentPicker = false;
+  showAllHomeworks = false;
 
   loadingHomeworks = false;
   loadingStudents = false;
@@ -42,7 +43,7 @@ export class TeacherAssignHomework implements OnInit {
 
   loadHomeworks() {
     this.loadingHomeworks = true;
-    this.api.getAllHomeworks().subscribe({
+    this.api.getAllHomeworks(!this.showAllHomeworks).subscribe({
       next: (res) => {
         this.homeworks = res;
         this.loadingHomeworks = false;
@@ -53,6 +54,11 @@ export class TeacherAssignHomework implements OnInit {
         this.cdr.detectChanges();
       }
     });
+  }
+
+  toggleShowAllHomeworks() {
+    this.showAllHomeworks = !this.showAllHomeworks;
+    this.loadHomeworks();
   }
 
   loadStudents() {

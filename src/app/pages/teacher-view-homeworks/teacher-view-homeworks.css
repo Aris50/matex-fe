@@ -206,6 +206,29 @@ pre {
   opacity: 0.96;
 }
 
+.show-more-row {
+  margin-top: 18px;
+  text-align: center;
+}
+
+.show-more-btn {
+  display: inline-block;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  background: none;
+  color: #43597D;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  box-shadow: none;
+}
+
+.show-more-btn:hover {
+  background: rgba(67, 89, 125, 0.08);
+}
+
 @media (max-width: 768px) {
   .page-card {
     padding: 28px 22px;

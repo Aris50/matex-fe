@@ -1,0 +1,97 @@
+<div class="page-shell">
+  <div class="page-card">
+    <div class="top-row">
+      <a routerLink="/" class="back-btn">← Dashboard</a>
+      <div class="badge">MateX · Owner</div>
+    </div>
+
+    <h1>Account Management</h1>
+    <p class="subtitle">Create and manage student and teacher accounts.</p>
+
+    <!-- Create button -->
+    <div class="create-row">
+      <button class="create-toggle-btn" (click)="toggleCreateForm()">
+        {{ showCreateForm ? '✕ Cancel' : '+ Create Account' }}
+      </button>
+    </div>
+
+    <!-- Create form -->
+    @if (showCreateForm) {
+      <div class="create-form">
+        <div class="form-grid">
+          <label>
+            <span>Full Name</span>
+            <input type="text" [(ngModel)]="newFullName" placeholder="e.g. John Doe" />
+          </label>
+
+          <label>
+            <span>Email</span>
+            <input type="email" [(ngModel)]="newEmail" placeholder="e.g. john@matex.app" />
+          </label>
+
+          <label>
+            <span>Password</span>
+            <input type="text" [(ngModel)]="newPassword" placeholder="Min 6 characters" />
+          </label>
+
+          <label>
+            <span>Role</span>
+            <select [(ngModel)]="newRole">
+              <option value="STUDENT">Student</option>
+              <option value="TEACHER">Teacher</option>
+            </select>
+          </label>
+        </div>
+
+        @if (createSuccess) {
+          <div class="msg success-msg">{{ createSuccess }}</div>
+        }
+        @if (createError) {
+          <div class="msg error-msg">{{ createError }}</div>
+        }
+
+        <button
+          class="submit-btn"
+          (click)="createAccount()"
+          [disabled]="creating || !newEmail || !newPassword || !newFullName"
+        >
+          {{ creating ? 'Creating...' : 'Create Account' }}
+        </button>
+      </div>
+    }
+
+    <!-- Accounts list -->
+    @if (loading) {
+      <div class="info-box">Loading accounts...</div>
+    }
+
+    @if (errorText) {
+      <div class="msg error-msg">{{ errorText }}</div>
+    }
+
+    @if (!loading && accounts.length > 0) {
+      <div class="accounts-list">
+        @for (a of accounts; track a.id) {
+          <div class="account-card">
+            <div class="account-avatar">{{ a.fullName.charAt(0).toUpperCase() }}</div>
+            <div class="account-info">
+              <div class="account-name">{{ a.fullName }}</div>
+              <div class="account-email">{{ a.email }}</div>
+            </div>
+            <span class="role-badge" [ngClass]="roleClass(a.role)">{{ a.role }}</span>
+            @if (a.role !== 'OWNER') {
+              <button
+                class="delete-btn"
+                (click)="deleteAccount(a.id)"
+                [disabled]="deletingId === a.id"
+              >
+                {{ deletingId === a.id ? '...' : '✕' }}
+              </button>
+            }
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>
+

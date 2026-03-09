@@ -355,3 +355,25 @@ pre {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+.show-more-btn {
+  display: block;
+  width: 100%;
+  margin-top: 14px;
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  background: none;
+  color: #43597D;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  transition: background 0.15s ease;
+  box-shadow: none;
+}
+
+.show-more-btn:hover {
+  background: rgba(67, 89, 125, 0.08);
+}
+

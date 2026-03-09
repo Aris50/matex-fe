@@ -25,6 +25,8 @@ export class TeacherViewHomeworks {
   loading = true;
   errorText: string | null = null;
 
+  showAllHomeworks = false;
+
   constructor(private api: ApiService, private cdr: ChangeDetectorRef) {
     this.loadHomeworks();
   }
@@ -33,14 +35,14 @@ export class TeacherViewHomeworks {
     this.loading = true;
     this.errorText = null;
 
-    this.api.getAllHomeworks().subscribe({
+    this.api.getAllHomeworks(!this.showAllHomeworks).subscribe({
       next: (res) => {
         this.homeworks = res;
         this.loading = false;
         this.cdr.detectChanges();
       },
       error: (err) => {
-        this.errorText = JSON.stringify(err);
+        this.errorText = 'Failed to load homeworks';
         this.loading = false;
         this.cdr.detectChanges();
       }
@@ -73,6 +75,11 @@ export class TeacherViewHomeworks {
         this.cdr.detectChanges();
       }
     });
+  }
+
+  toggleShowAll() {
+    this.showAllHomeworks = !this.showAllHomeworks;
+    this.loadHomeworks();
   }
 
   buildExerciseImageUrl(imagePath: string | null | undefined): string {

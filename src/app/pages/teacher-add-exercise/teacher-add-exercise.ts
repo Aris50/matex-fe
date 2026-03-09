@@ -15,6 +15,7 @@ export class TeacherAddExercise implements OnInit {
   homeworks: HomeworkResponse[] = [];
   selectedHomework: HomeworkResponse | null = null;
   showHomeworkPicker = false;
+  showAllHomeworks = false;
 
   instructionText = '';
   selectedImage: File | null = null;
@@ -32,7 +33,7 @@ export class TeacherAddExercise implements OnInit {
 
   loadHomeworks() {
     this.loadingHomeworks = true;
-    this.api.getAllHomeworks().subscribe({
+    this.api.getAllHomeworks(!this.showAllHomeworks).subscribe({
       next: (res) => {
         this.homeworks = res;
         this.loadingHomeworks = false;
@@ -43,6 +44,11 @@ export class TeacherAddExercise implements OnInit {
         this.cdr.detectChanges();
       }
     });
+  }
+
+  toggleShowAll() {
+    this.showAllHomeworks = !this.showAllHomeworks;
+    this.loadHomeworks();
   }
 
   openPicker() {

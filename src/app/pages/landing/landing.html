@@ -47,6 +47,13 @@
       See all students, their assigned homework, and delivery status.
     </div>
   </a>
+
+  <a *ngIf="auth.hasRole('OWNER')" routerLink="/owner/accounts" class="action-card">
+    <div class="action-title">Manage Accounts</div>
+    <div class="action-text">
+      Create and manage student and teacher accounts.
+    </div>
+  </a>
 </div>
   </div>
 </div>

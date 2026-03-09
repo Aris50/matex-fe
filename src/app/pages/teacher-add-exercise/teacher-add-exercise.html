@@ -74,7 +74,10 @@
         <button class="close-btn" (click)="closePicker()">✕</button>
       </div>
 
-      @if (homeworks.length === 0) {
+      @if (homeworks.length === 0 && !showAllHomeworks) {
+        <p class="picker-empty">No homeworks created in the last 30 minutes.</p>
+      }
+      @if (homeworks.length === 0 && showAllHomeworks) {
         <p class="picker-empty">No homeworks found. Create one first.</p>
       }
 
@@ -95,6 +98,10 @@
           </div>
         }
       </div>
+
+      <button class="show-more-btn" (click)="toggleShowAll()">
+        {{ showAllHomeworks ? 'Show recent only' : 'Show all homeworks' }}
+      </button>
     </div>
   </div>
 }
