@@ -1,23 +1,83 @@
-<div class="page-shell">
-  <div class="dashboard-card">
-    <div class="top-bar">
-      <div class="badge">MateX · Student</div>
+<div class="dashboard-shell">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">MateX</div>
+
+    <nav class="sidebar-nav">
+      <a routerLink="/student" class="nav-item active">
+        <span class="nav-icon">◉</span>
+        <span>Dashboard</span>
+      </a>
+      <a routerLink="/student/assignments" class="nav-item">
+        <span class="nav-icon">☰</span>
+        <span>All Assignments</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
       <button class="logout-btn" (click)="logout()">Sign Out</button>
     </div>
+  </aside>
 
-    <h1>Welcome, {{ auth.getCurrentUser()?.fullName }}</h1>
-    <p class="subtitle">
-      View your assigned homework, complete exercises, and submit your work.
-    </p>
+  <!-- Main -->
+  <main class="main-content">
+    <header class="main-header">
+      <div>
+        <h1>{{ greeting }}, {{ auth.getCurrentUser()?.fullName }}</h1>
+        <p class="header-subtitle">Here's your homework overview.</p>
+      </div>
+      <span class="role-chip">Student</span>
+    </header>
 
-    <div class="actions-grid">
-      <a routerLink="/student/assignments" class="action-card">
-        <div class="action-title">My Assignments</div>
-        <div class="action-text">
-          View all homework assigned to you, check due dates and status.
-        </div>
-      </a>
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-value">{{ assignments.length }}</div>
+        <div class="stat-label">Total Assignments</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">{{ pendingCount }}</div>
+        <div class="stat-label">Pending</div>
+      </div>
+      <div class="stat-card accent">
+        <div class="stat-value">{{ completedCount }}</div>
+        <div class="stat-label">Submitted</div>
+      </div>
     </div>
-  </div>
+
+    <!-- Assignments -->
+    <section class="content-card">
+      <div class="card-header">
+        <h2>Your Assignments</h2>
+        <a routerLink="/student/assignments" class="view-all-link">View all →</a>
+      </div>
+
+      <div *ngIf="loading" class="empty-state">Loading assignments...</div>
+
+      <div *ngIf="!loading && assignments.length === 0" class="empty-state">
+        No assignments yet. Your teacher will assign homework to you.
+      </div>
+
+      <div class="assignment-list" *ngIf="!loading && assignments.length > 0">
+        <a
+          *ngFor="let a of assignments"
+          [routerLink]="['/student/assignments', a.assignmentId]"
+          class="assignment-row"
+        >
+          <div class="assignment-info">
+            <div class="assignment-title">{{ a.homeworkTitle }}</div>
+            <div class="assignment-meta">
+              <span *ngIf="a.dueAt">Due: {{ a.dueAt }}</span>
+              <span *ngIf="!a.dueAt">No due date</span>
+              <span>· Assigned: {{ a.assignedAt | date:'mediumDate' }}</span>
+            </div>
+          </div>
+          <span class="status-pill" [ngClass]="statusClass(a.status)">
+            {{ statusLabel(a.status) }}
+          </span>
+        </a>
+      </div>
+    </section>
+  </main>
 </div>
 

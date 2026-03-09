@@ -1,59 +1,135 @@
-<div class="teacher-home-page">
-  <div class="dashboard-card">
-    <div class="top-bar">
-      <div class="badge">MateX · {{ auth.getCurrentUser()?.role }}</div>
+<div class="dashboard-shell">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">MateX</div>
+
+    <nav class="sidebar-nav">
+      <a routerLink="/" class="nav-item active">
+        <span class="nav-icon">◉</span>
+        <span>Overview</span>
+      </a>
+      <a routerLink="/teacher/create-homework" class="nav-item">
+        <span class="nav-icon">＋</span>
+        <span>New Homework</span>
+      </a>
+      <a routerLink="/teacher/add-exercise" class="nav-item">
+        <span class="nav-icon">✎</span>
+        <span>Add Exercise</span>
+      </a>
+      <a routerLink="/teacher/assign-homework" class="nav-item">
+        <span class="nav-icon">↗</span>
+        <span>Assign</span>
+      </a>
+      <a routerLink="/teacher/view-homeworks" class="nav-item">
+        <span class="nav-icon">☰</span>
+        <span>All Homeworks</span>
+      </a>
+      <a routerLink="/teacher/students" class="nav-item">
+        <span class="nav-icon">👤</span>
+        <span>Students</span>
+      </a>
+      <a *ngIf="auth.hasRole('OWNER')" routerLink="/owner/accounts" class="nav-item">
+        <span class="nav-icon">⚙</span>
+        <span>Accounts</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
       <button class="logout-btn" (click)="logout()">Sign Out</button>
     </div>
+  </aside>
 
-    <h1>Welcome, {{ auth.getCurrentUser()?.fullName }}</h1>
+  <!-- Main content -->
+  <main class="main-content">
+    <!-- Header -->
+    <header class="main-header">
+      <div>
+        <h1>{{ greeting }}, {{ auth.getCurrentUser()?.fullName }}</h1>
+        <p class="header-subtitle">Here's what's happening in your classroom.</p>
+      </div>
+      <div class="header-role">
+        <span class="role-chip">{{ auth.getCurrentUser()?.role }}</span>
+      </div>
+    </header>
 
-    <p class="subtitle">
-      Create homework, add exercises, and assign work to students through one
-      clean workflow.
-    </p>
-
-    <div class="actions-grid">
-  <a routerLink="/teacher/create-homework" class="action-card">
-    <div class="action-title">Create Homework</div>
-    <div class="action-text">
-      Start a new reusable homework with title, description, and due date.
+    <!-- Stats row -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-value">{{ recentHomeworks.length }}</div>
+        <div class="stat-label">Recent Homeworks</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">{{ students.length }}</div>
+        <div class="stat-label">Students</div>
+      </div>
+      <div class="stat-card accent">
+        <div class="stat-value quick-action">
+          <a routerLink="/teacher/create-homework">+ New Homework</a>
+        </div>
+        <div class="stat-label">Quick Action</div>
+      </div>
     </div>
-  </a>
 
-  <a routerLink="/teacher/add-exercise" class="action-card">
-    <div class="action-title">Add Exercise</div>
-    <div class="action-text">
-      Add ordered exercises to an existing homework.
-    </div>
-  </a>
+    <!-- Two-column layout -->
+    <div class="content-grid">
+      <!-- Recent Homeworks -->
+      <section class="content-card">
+        <div class="card-header">
+          <h2>Recent Homeworks</h2>
+          <a routerLink="/teacher/view-homeworks" class="view-all-link">View all →</a>
+        </div>
 
-  <a routerLink="/teacher/assign-homework" class="action-card">
-    <div class="action-title">Assign Homework</div>
-    <div class="action-text">
-      Assign a homework to one or more students.
-    </div>
-  </a>
+        <div *ngIf="loadingHomeworks" class="empty-state">Loading...</div>
 
-  <a routerLink="/teacher/view-homeworks" class="action-card">
-    <div class="action-title">View Homeworks</div>
-    <div class="action-text">
-      Browse all homeworks and expand them to see their exercises.
-    </div>
-  </a>
+        <div *ngIf="!loadingHomeworks && recentHomeworks.length === 0" class="empty-state">
+          No homeworks created recently.
+          <a routerLink="/teacher/create-homework" class="empty-action">Create one now</a>
+        </div>
 
-  <a routerLink="/teacher/students" class="action-card">
-    <div class="action-title">View Students</div>
-    <div class="action-text">
-      See all students, their assigned homework, and delivery status.
-    </div>
-  </a>
+        <div class="item-list" *ngIf="!loadingHomeworks && recentHomeworks.length > 0">
+          <a
+            *ngFor="let hw of recentHomeworks.slice(0, 5)"
+            routerLink="/teacher/view-homeworks"
+            class="list-item"
+          >
+            <div class="list-item-title">{{ hw.title }}</div>
+            <div class="list-item-meta">
+              <span *ngIf="hw.dueAt">Due: {{ hw.dueAt }}</span>
+              <span *ngIf="!hw.dueAt">No due date</span>
+            </div>
+          </a>
+        </div>
+      </section>
 
-  <a *ngIf="auth.hasRole('OWNER')" routerLink="/owner/accounts" class="action-card">
-    <div class="action-title">Manage Accounts</div>
-    <div class="action-text">
-      Create and manage student and teacher accounts.
+      <!-- Students -->
+      <section class="content-card">
+        <div class="card-header">
+          <h2>Students</h2>
+          <a routerLink="/teacher/students" class="view-all-link">View all →</a>
+        </div>
+
+        <div *ngIf="loadingStudents" class="empty-state">Loading...</div>
+
+        <div *ngIf="!loadingStudents && students.length === 0" class="empty-state">
+          No students yet.
+          <a *ngIf="auth.hasRole('OWNER')" routerLink="/owner/accounts" class="empty-action">Create accounts</a>
+        </div>
+
+        <div class="item-list" *ngIf="!loadingStudents && students.length > 0">
+          <a
+            *ngFor="let s of students.slice(0, 6)"
+            [routerLink]="['/teacher/students', s.id]"
+            class="list-item student-item"
+          >
+            <div class="student-avatar">{{ s.fullName.charAt(0).toUpperCase() }}</div>
+            <div>
+              <div class="list-item-title">{{ s.fullName }}</div>
+              <div class="list-item-meta">{{ s.email }}</div>
+            </div>
+          </a>
+        </div>
+      </section>
     </div>
-  </a>
+  </main>
 </div>
-  </div>
-</div>
+
