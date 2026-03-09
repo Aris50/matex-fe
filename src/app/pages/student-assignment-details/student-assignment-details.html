@@ -1,0 +1,110 @@
+<div class="page-shell">
+  <div class="page-card">
+    <div class="top-row">
+      <a routerLink="/student/assignments" class="back-btn">← My Assignments</a>
+      <div class="badge">MateX · Student</div>
+    </div>
+
+    @if (loading) {
+      <div class="info-box">Loading assignment...</div>
+    }
+
+    @if (errorText) {
+      <div class="result-box error-box">{{ errorText }}</div>
+    }
+
+    @if (details) {
+      <h1>{{ details.homeworkTitle }}</h1>
+      <p class="subtitle">{{ details.homeworkDescription || 'No description.' }}</p>
+
+      <div class="hw-meta">
+        <span class="status-badge" [ngClass]="{
+          'status-assigned': details.status === 'ASSIGNED',
+          'status-progress': details.status === 'IN_PROGRESS',
+          'status-completed': details.status === 'COMPLETED'
+        }">{{ details.status }}</span>
+        @if (details.dueAt) {
+          <span class="meta-item">Due: {{ details.dueAt }}</span>
+        }
+      </div>
+
+      <div class="exercise-list">
+        @for (ex of details.exercises; track ex.exerciseId) {
+          <div class="exercise-card">
+            <div class="exercise-header">
+              <span class="exercise-number">Exercise {{ ex.orderIndex }}</span>
+            </div>
+
+            <div class="exercise-instruction">{{ ex.instructionText }}</div>
+
+            @if (ex.imagePath) {
+              <a [href]="buildImageUrl(ex.imagePath)" target="_blank" class="exercise-image-link">
+                <img
+                  class="exercise-image"
+                  [src]="buildImageUrl(ex.imagePath)"
+                  alt="Exercise image"
+                />
+              </a>
+            }
+
+            <!-- Latest submission -->
+            @if (ex.latestSubmission) {
+              <div class="submission-box">
+                <div class="submission-header">
+                  Latest Submission (Attempt #{{ ex.latestSubmission.attemptNo }})
+                </div>
+                @if (ex.latestSubmission.textResult) {
+                  <div class="submission-text">{{ ex.latestSubmission.textResult }}</div>
+                }
+                @if (ex.latestSubmission.files.length > 0) {
+                  <div class="submission-files">
+                    @for (f of ex.latestSubmission.files; track f.fileId) {
+                      <span class="file-chip">📎 {{ f.originalFilename }}</span>
+                    }
+                  </div>
+                }
+                <div class="submission-time">Submitted: {{ ex.latestSubmission.submittedAt | date:'short' }}</div>
+              </div>
+            }
+
+            <!-- Submit new attempt -->
+            <div class="submit-section">
+              <div class="submit-title">
+                {{ ex.latestSubmission ? 'Submit Another Attempt' : 'Submit Your Answer' }}
+              </div>
+
+              <textarea
+                rows="3"
+                [ngModel]="submissionText[ex.exerciseId] || ''"
+                (ngModelChange)="submissionText[ex.exerciseId] = $event"
+                placeholder="Write your answer here..."
+              ></textarea>
+
+              <input
+                type="file"
+                multiple
+                (change)="onFilesSelected(ex.exerciseId, $event)"
+              />
+
+              @if (submitSuccess[ex.exerciseId]) {
+                <div class="submit-msg success-msg">{{ submitSuccess[ex.exerciseId] }}</div>
+              }
+              @if (submitError[ex.exerciseId]) {
+                <div class="submit-msg error-msg">{{ submitError[ex.exerciseId] }}</div>
+              }
+
+              <button
+                class="submit-btn"
+                (click)="submitExercise(ex.exerciseId)"
+                [disabled]="submitting[ex.exerciseId] || !canSubmit(ex.exerciseId)"
+              >
+                {{ submitting[ex.exerciseId] ? 'Submitting...' : 'Submit' }}
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>
+

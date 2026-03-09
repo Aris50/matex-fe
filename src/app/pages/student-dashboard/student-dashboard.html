@@ -1,0 +1,23 @@
+<div class="page-shell">
+  <div class="dashboard-card">
+    <div class="top-bar">
+      <div class="badge">MateX · Student</div>
+      <button class="logout-btn" (click)="logout()">Sign Out</button>
+    </div>
+
+    <h1>Welcome, {{ auth.getCurrentUser()?.fullName }}</h1>
+    <p class="subtitle">
+      View your assigned homework, complete exercises, and submit your work.
+    </p>
+
+    <div class="actions-grid">
+      <a routerLink="/student/assignments" class="action-card">
+        <div class="action-title">My Assignments</div>
+        <div class="action-text">
+          View all homework assigned to you, check due dates and status.
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+

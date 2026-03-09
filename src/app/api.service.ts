@@ -56,6 +56,60 @@ export interface StudentResponse {
   fullName: string;
 }
 
+// --- Student-side DTOs ---
+
+export interface StudentAssignmentListItem {
+  assignmentId: number;
+  homeworkId: number;
+  homeworkTitle: string;
+  dueAt: string | null;
+  status: string;
+  assignedAt: string;
+}
+
+export interface SubmissionFileResponse {
+  fileId: number;
+  originalFilename: string;
+  contentType: string;
+  sizeBytes: number;
+}
+
+export interface LatestSubmissionResponse {
+  submissionId: number;
+  attemptNo: number;
+  textResult: string | null;
+  submittedAt: string;
+  files: SubmissionFileResponse[];
+}
+
+export interface ExerciseWithSubmission {
+  exerciseId: number;
+  orderIndex: number;
+  instructionText: string;
+  createdAt: string;
+  imagePath: string | null;
+  latestSubmission: LatestSubmissionResponse | null;
+}
+
+export interface StudentAssignmentDetails {
+  assignmentId: number;
+  status: string;
+  assignedAt: string;
+  homeworkId: number;
+  homeworkTitle: string;
+  homeworkDescription: string | null;
+  dueAt: string | null;
+  exercises: ExerciseWithSubmission[];
+}
+
+export interface SubmissionCreatedResponse {
+  submissionId: number;
+  attemptNo: number;
+  submittedAt: string;
+  textResult: string | null;
+  fileIds: number[];
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -105,5 +159,31 @@ export class ApiService {
 
   getStudents() {
     return this.http.get<StudentResponse[]>(`${this.baseUrl}/api/v1/teacher/students`);
+  }
+
+  // --- Student endpoints ---
+
+  getMyAssignments() {
+    return this.http.get<StudentAssignmentListItem[]>(`${this.baseUrl}/api/v1/student/assignments`);
+  }
+
+  getAssignmentDetails(assignmentId: number) {
+    return this.http.get<StudentAssignmentDetails>(
+      `${this.baseUrl}/api/v1/student/assignments/${assignmentId}`
+    );
+  }
+
+  submitExercise(assignmentId: number, exerciseId: number, textResult: string | null, files: File[]) {
+    const formData = new FormData();
+    if (textResult) {
+      formData.append('textResult', textResult);
+    }
+    for (const file of files) {
+      formData.append('files', file);
+    }
+    return this.http.post<SubmissionCreatedResponse>(
+      `${this.baseUrl}/api/v1/student/assignments/${assignmentId}/exercises/${exerciseId}/submissions`,
+      formData
+    );
   }
 }

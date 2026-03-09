@@ -31,7 +31,12 @@ export class LoginPage {
     this.authService.login({ email: this.email, password: this.password }).subscribe({
       next: () => {
         this.loading = false;
-        this.router.navigate(['/']);
+        const role = this.authService.getCurrentUser()?.role;
+        if (role === 'STUDENT') {
+          this.router.navigate(['/student']);
+        } else {
+          this.router.navigate(['/']);
+        }
       },
       error: (err) => {
         this.loading = false;

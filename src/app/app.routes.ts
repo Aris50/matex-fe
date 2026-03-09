@@ -6,6 +6,9 @@ import { TeacherAddExercise } from './pages/teacher-add-exercise/teacher-add-exe
 import { TeacherAssignHomework } from './pages/teacher-assign-homework/teacher-assign-homework';
 import { TeacherViewHomeworks } from './pages/teacher-view-homeworks/teacher-view-homeworks';
 import { LoginPage } from './pages/login/login';
+import { StudentDashboard } from './pages/student-dashboard/student-dashboard';
+import { StudentAssignments } from './pages/student-assignments/student-assignments';
+import { StudentAssignmentDetailsPage } from './pages/student-assignment-details/student-assignment-details';
 import { authGuard } from './auth/auth.guard';
 import { roleGuard } from './auth/auth.guard';
 
@@ -13,8 +16,15 @@ export const routes: Routes = [
   { path: 'login', component: LoginPage },
   { path: '', component: Landing, canActivate: [authGuard] },
   { path: 'health', component: HealthComponent },
+
+  // Teacher routes
   { path: 'teacher/create-homework', component: TeacherCreateHomework, canActivate: [roleGuard('OWNER', 'TEACHER')] },
   { path: 'teacher/add-exercise', component: TeacherAddExercise, canActivate: [roleGuard('OWNER', 'TEACHER')] },
   { path: 'teacher/assign-homework', component: TeacherAssignHomework, canActivate: [roleGuard('OWNER', 'TEACHER')] },
-  { path: 'teacher/view-homeworks', component: TeacherViewHomeworks, canActivate: [roleGuard('OWNER', 'TEACHER')] }
+  { path: 'teacher/view-homeworks', component: TeacherViewHomeworks, canActivate: [roleGuard('OWNER', 'TEACHER')] },
+
+  // Student routes
+  { path: 'student', component: StudentDashboard, canActivate: [roleGuard('STUDENT')] },
+  { path: 'student/assignments', component: StudentAssignments, canActivate: [roleGuard('STUDENT')] },
+  { path: 'student/assignments/:assignmentId', component: StudentAssignmentDetailsPage, canActivate: [roleGuard('STUDENT')] },
 ];

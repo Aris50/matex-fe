@@ -1,0 +1,43 @@
+<div class="page-shell">
+  <div class="page-card">
+    <div class="top-row">
+      <a routerLink="/student" class="back-btn">← Dashboard</a>
+      <div class="badge">MateX · Student</div>
+    </div>
+
+    <h1>My Assignments</h1>
+    <p class="subtitle">All homework assigned to you.</p>
+
+    @if (loading) {
+      <div class="info-box">Loading assignments...</div>
+    }
+
+    @if (errorText) {
+      <div class="result-box error-box">{{ errorText }}</div>
+    }
+
+    @if (!loading && assignments.length === 0) {
+      <div class="info-box">No assignments yet. Your teacher will assign homework to you.</div>
+    }
+
+    @if (!loading && assignments.length > 0) {
+      <div class="assignment-list">
+        @for (a of assignments; track a.assignmentId) {
+          <a [routerLink]="['/student/assignments', a.assignmentId]" class="assignment-card">
+            <div class="assignment-header">
+              <div class="assignment-title">{{ a.homeworkTitle }}</div>
+              <span class="status-badge" [ngClass]="statusClass(a.status)">{{ a.status }}</span>
+            </div>
+            <div class="assignment-meta">
+              @if (a.dueAt) {
+                <span>Due: {{ a.dueAt }}</span>
+              }
+              <span>Assigned: {{ a.assignedAt | date:'short' }}</span>
+            </div>
+          </a>
+        }
+      </div>
+    }
+  </div>
+</div>
+
