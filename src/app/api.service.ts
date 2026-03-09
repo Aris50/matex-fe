@@ -7,7 +7,6 @@ export interface HealthResponse {
 }
 
 export interface CreateHomeworkRequest {
-  teacherId: number;
   title: string;
   description: string;
   dueAt: string;

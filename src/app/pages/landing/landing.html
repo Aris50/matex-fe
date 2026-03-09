@@ -1,8 +1,11 @@
 <div class="teacher-home-page">
   <div class="dashboard-card">
-    <div class="badge">MateX · Teacher</div>
+    <div class="top-bar">
+      <div class="badge">MateX · {{ auth.getCurrentUser()?.role }}</div>
+      <button class="logout-btn" (click)="logout()">Sign Out</button>
+    </div>
 
-    <h1>Teacher Dashboard</h1>
+    <h1>Welcome, {{ auth.getCurrentUser()?.fullName }}</h1>
 
     <p class="subtitle">
       Create homework, add exercises, and assign work to students through one

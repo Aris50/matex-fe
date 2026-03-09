@@ -1,0 +1,44 @@
+<div class="login-page">
+  <div class="login-card">
+    <div class="badge">MateX</div>
+    <h1>Sign In</h1>
+    <p class="subtitle">Enter your credentials to continue.</p>
+
+    <form (ngSubmit)="onSubmit()" class="login-form">
+      <div class="field">
+        <label for="email">Email</label>
+        <input
+          id="email"
+          type="email"
+          [(ngModel)]="email"
+          name="email"
+          placeholder="you@matex.app"
+          required
+          autocomplete="email"
+        />
+      </div>
+
+      <div class="field">
+        <label for="password">Password</label>
+        <input
+          id="password"
+          type="password"
+          [(ngModel)]="password"
+          name="password"
+          placeholder="••••••••"
+          required
+          autocomplete="current-password"
+        />
+      </div>
+
+      @if (errorText) {
+        <div class="error-box">{{ errorText }}</div>
+      }
+
+      <button type="submit" [disabled]="loading || !email || !password">
+        {{ loading ? 'Signing in...' : 'Sign In' }}
+      </button>
+    </form>
+  </div>
+</div>
+

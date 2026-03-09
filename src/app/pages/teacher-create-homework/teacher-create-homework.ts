@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { CommonModule, JsonPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -16,7 +16,6 @@ import {
   styleUrl: './teacher-create-homework.css'
 })
 export class TeacherCreateHomework {
-  teacherId = 1;
   title = '';
   description = '';
   dueAt = '';
@@ -25,7 +24,7 @@ export class TeacherCreateHomework {
   errorText: string | null = null;
   createdHomework: HomeworkResponse | null = null;
 
-  constructor(private api: ApiService) {}
+  constructor(private api: ApiService, private cdr: ChangeDetectorRef) {}
 
   createHomework() {
     this.loading = true;
@@ -33,7 +32,6 @@ export class TeacherCreateHomework {
     this.createdHomework = null;
 
     const payload: CreateHomeworkRequest = {
-      teacherId: this.teacherId,
       title: this.title,
       description: this.description,
       dueAt: this.dueAt
@@ -43,10 +41,12 @@ export class TeacherCreateHomework {
       next: (res) => {
         this.createdHomework = res;
         this.loading = false;
+        this.cdr.detectChanges();
       },
       error: (err) => {
         this.errorText = JSON.stringify(err);
         this.loading = false;
+        this.cdr.detectChanges();
       }
     });
   }

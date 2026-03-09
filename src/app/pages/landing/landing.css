@@ -36,7 +36,31 @@
   border-radius: 999px;
   font-size: 14px;
   font-weight: 600;
+}
+
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin-bottom: 18px;
+}
+
+.logout-btn {
+  padding: 8px 18px;
+  border: 1px solid rgba(67, 89, 125, 0.3);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.5);
+  color: #43597D;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.logout-btn:hover {
+  background: #b91c1c;
+  color: #fff;
+  border-color: #b91c1c;
 }
 
 h1 {
