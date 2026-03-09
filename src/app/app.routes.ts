@@ -5,6 +5,8 @@ import { Landing } from './pages/landing/landing';
 import { TeacherAddExercise } from './pages/teacher-add-exercise/teacher-add-exercise';
 import { TeacherAssignHomework } from './pages/teacher-assign-homework/teacher-assign-homework';
 import { TeacherViewHomeworks } from './pages/teacher-view-homeworks/teacher-view-homeworks';
+import { TeacherStudents } from './pages/teacher-students/teacher-students';
+import { TeacherStudentDetail } from './pages/teacher-student-detail/teacher-student-detail';
 import { LoginPage } from './pages/login/login';
 import { StudentDashboard } from './pages/student-dashboard/student-dashboard';
 import { StudentAssignments } from './pages/student-assignments/student-assignments';
@@ -22,6 +24,8 @@ export const routes: Routes = [
   { path: 'teacher/add-exercise', component: TeacherAddExercise, canActivate: [roleGuard('OWNER', 'TEACHER')] },
   { path: 'teacher/assign-homework', component: TeacherAssignHomework, canActivate: [roleGuard('OWNER', 'TEACHER')] },
   { path: 'teacher/view-homeworks', component: TeacherViewHomeworks, canActivate: [roleGuard('OWNER', 'TEACHER')] },
+  { path: 'teacher/students', component: TeacherStudents, canActivate: [roleGuard('OWNER', 'TEACHER')] },
+  { path: 'teacher/students/:studentId', component: TeacherStudentDetail, canActivate: [roleGuard('OWNER', 'TEACHER')] },
 
   // Student routes
   { path: 'student', component: StudentDashboard, canActivate: [roleGuard('STUDENT')] },

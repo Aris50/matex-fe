@@ -1,0 +1,121 @@
+<div class="page-shell">
+  <div class="page-card">
+    <div class="top-row">
+      <a routerLink="/teacher/students" class="back-btn">← All Students</a>
+      <div class="badge">MateX · Teacher</div>
+    </div>
+
+    <h1>{{ studentName || 'Student' }}</h1>
+    <p class="subtitle">Click on an assignment to view exercises and student submissions.</p>
+
+    @if (loading) {
+      <div class="info-box">Loading assignments...</div>
+    }
+
+    @if (errorText) {
+      <div class="result-box error-box">{{ errorText }}</div>
+    }
+
+    @if (!loading && assignments.length === 0) {
+      <div class="info-box">No homework has been assigned to this student yet.</div>
+    }
+
+    @if (!loading && assignments.length > 0) {
+      <div class="assignment-list">
+        @for (a of assignments; track a.assignmentId) {
+          <div class="assignment-card">
+            <button class="assignment-header" (click)="toggleAssignment(a.assignmentId)">
+              <div class="header-left">
+                <div class="assignment-title">{{ a.homeworkTitle }}</div>
+                <div class="assignment-meta">
+                  @if (a.dueAt) {
+                    <span>Due: {{ a.dueAt }}</span>
+                  }
+                  <span>Assigned: {{ a.assignedAt | date:'short' }}</span>
+                </div>
+              </div>
+              <div class="header-right">
+                <span class="status-badge" [ngClass]="statusClass(a.deliveryStatus)">
+                  {{ statusLabel(a.deliveryStatus) }}
+                </span>
+                <span class="expand-icon">{{ expandedAssignmentId === a.assignmentId ? '−' : '+' }}</span>
+              </div>
+            </button>
+
+            <!-- Expanded detail -->
+            @if (expandedAssignmentId === a.assignmentId) {
+              <div class="assignment-body">
+                @if (a.homeworkDescription) {
+                  <div class="hw-description">{{ a.homeworkDescription }}</div>
+                }
+
+                @if (loadingDetails) {
+                  <div class="info-box">Loading exercises & submissions...</div>
+                }
+
+                @if (assignmentDetails) {
+                  <div class="exercise-list">
+                    @for (ex of assignmentDetails.exercises; track ex.exerciseId) {
+                      <div class="exercise-card">
+                        <div class="exercise-label">Exercise {{ ex.orderIndex }}</div>
+                        <div class="exercise-instruction">{{ ex.instructionText }}</div>
+
+                        <!-- Exercise image (set by teacher) -->
+                        @if (ex.imagePath) {
+                          <div class="exercise-image-wrap">
+                            <img
+                              [src]="buildImageUrl(ex.imagePath)"
+                              alt="Exercise image"
+                              class="exercise-image"
+                            />
+                          </div>
+                        }
+
+                        <!-- Student submission -->
+                        @if (ex.latestSubmission) {
+                          <div class="submission-box">
+                            <div class="submission-header">
+                              Student Submission (Attempt #{{ ex.latestSubmission.attemptNo }})
+                              <span class="submission-time">· {{ ex.latestSubmission.submittedAt | date:'short' }}</span>
+                            </div>
+
+                            @if (ex.latestSubmission.textResult) {
+                              <div class="submission-text">{{ ex.latestSubmission.textResult }}</div>
+                            }
+
+                            @if (ex.latestSubmission.files.length > 0) {
+                              <div class="submission-files">
+                                @for (f of ex.latestSubmission.files; track f.fileId) {
+                                  @if (isImage(f.contentType)) {
+                                    <a [href]="buildFileUrl(f.storageKey)" target="_blank" class="file-image-link">
+                                      <img
+                                        [src]="buildFileUrl(f.storageKey)"
+                                        [alt]="f.originalFilename"
+                                        class="submission-image"
+                                      />
+                                    </a>
+                                  } @else {
+                                    <a [href]="buildFileUrl(f.storageKey)" target="_blank" class="file-chip">
+                                      📎 {{ f.originalFilename }}
+                                    </a>
+                                  }
+                                }
+                              </div>
+                            }
+                          </div>
+                        } @else {
+                          <div class="no-submission">No submission for this exercise.</div>
+                        }
+                      </div>
+                    }
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>
+

@@ -56,6 +56,16 @@ export interface StudentResponse {
   fullName: string;
 }
 
+export interface TeacherStudentAssignment {
+  assignmentId: number;
+  homeworkId: number;
+  homeworkTitle: string;
+  homeworkDescription: string | null;
+  dueAt: string | null;
+  assignedAt: string;
+  deliveryStatus: 'DELIVERED' | 'DELIVERED_LATE' | 'PARTLY_DELIVERED' | 'UNDELIVERED';
+}
+
 // --- Student-side DTOs ---
 
 export interface StudentAssignmentListItem {
@@ -69,6 +79,7 @@ export interface StudentAssignmentListItem {
 
 export interface SubmissionFileResponse {
   fileId: number;
+  storageKey: string;
   originalFilename: string;
   contentType: string;
   sizeBytes: number;
@@ -159,6 +170,18 @@ export class ApiService {
 
   getStudents() {
     return this.http.get<StudentResponse[]>(`${this.baseUrl}/api/v1/teacher/students`);
+  }
+
+  getStudentAssignments(studentId: number) {
+    return this.http.get<TeacherStudentAssignment[]>(
+      `${this.baseUrl}/api/v1/teacher/students/${studentId}/assignments`
+    );
+  }
+
+  getTeacherAssignmentDetails(studentId: number, assignmentId: number) {
+    return this.http.get<StudentAssignmentDetails>(
+      `${this.baseUrl}/api/v1/teacher/students/${studentId}/assignments/${assignmentId}`
+    );
   }
 
   // --- Student endpoints ---
