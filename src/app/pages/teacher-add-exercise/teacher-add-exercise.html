@@ -7,19 +7,30 @@
 
     <h1>Add Exercise</h1>
     <p class="subtitle">
-      Add an ordered exercise to an existing homework, optionally with one image.
+      Select a homework and write the exercise instructions. The order is managed automatically.
     </p>
 
     <div class="form-grid">
-      <label>
-        <span>Homework ID</span>
-        <input type="number" [(ngModel)]="homeworkId" />
-      </label>
-
-      <label>
-        <span>Order Index</span>
-        <input type="number" [(ngModel)]="orderIndex" />
-      </label>
+      <!-- Homework selector -->
+      <div class="full-width">
+        <span class="field-label">Homework</span>
+        @if (selectedHomework) {
+          <div class="selected-hw" (click)="openPicker()">
+            <div class="selected-hw-title">{{ selectedHomework.title }}</div>
+            <div class="selected-hw-meta">
+              ID #{{ selectedHomework.id }}
+              @if (selectedHomework.dueAt) {
+                · Due {{ selectedHomework.dueAt }}
+              }
+            </div>
+            <span class="change-link">Change</span>
+          </div>
+        } @else {
+          <button class="pick-hw-btn" (click)="openPicker()" [disabled]="loadingHomeworks">
+            {{ loadingHomeworks ? 'Loading homeworks...' : 'Select a homework' }}
+          </button>
+        }
+      </div>
 
       <label class="full-width">
         <span>Instruction Text</span>
@@ -33,19 +44,58 @@
     </div>
 
     <div class="actions">
-      <button (click)="addExercise()" [disabled]="loading">
+      <button (click)="addExercise()" [disabled]="loading || !selectedHomework || !instructionText">
         {{ loading ? 'Adding...' : 'Add Exercise' }}
       </button>
     </div>
 
-    <div *ngIf="createdExercise" class="result-box success-box">
-      <h3>Created Exercise</h3>
-      <pre>{{ createdExercise | json }}</pre>
-    </div>
+    @if (createdExercise) {
+      <div class="result-box success-box">
+        <h3>Exercise Added (Order #{{ createdExercise.orderIndex }})</h3>
+        <pre>{{ createdExercise | json }}</pre>
+      </div>
+    }
 
-    <div *ngIf="errorText" class="result-box error-box">
-      <h3>Error</h3>
-      <pre>{{ errorText }}</pre>
-    </div>
+    @if (errorText) {
+      <div class="result-box error-box">
+        <h3>Error</h3>
+        <pre>{{ errorText }}</pre>
+      </div>
+    }
   </div>
 </div>
+
+<!-- Homework picker overlay -->
+@if (showHomeworkPicker) {
+  <div class="overlay" (click)="closePicker()">
+    <div class="picker-card" (click)="$event.stopPropagation()">
+      <div class="picker-header">
+        <h2>Select Homework</h2>
+        <button class="close-btn" (click)="closePicker()">✕</button>
+      </div>
+
+      @if (homeworks.length === 0) {
+        <p class="picker-empty">No homeworks found. Create one first.</p>
+      }
+
+      <div class="picker-list">
+        @for (hw of homeworks; track hw.id) {
+          <div
+            class="picker-item"
+            [class.selected]="selectedHomework?.id === hw.id"
+            (click)="selectHomework(hw)"
+          >
+            <div class="picker-item-title">{{ hw.title }}</div>
+            <div class="picker-item-meta">
+              ID #{{ hw.id }}
+              @if (hw.description) {
+                · {{ hw.description }}
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+}
+

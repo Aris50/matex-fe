@@ -50,6 +50,12 @@ export interface AssignmentResponse {
   assignedAt: string;
 }
 
+export interface StudentResponse {
+  id: number;
+  email: string;
+  fullName: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -70,9 +76,8 @@ export class ApiService {
     return this.http.get<HomeworkResponse[]>(`${this.baseUrl}/api/v1/teacher/homeworks`);
   }
 
-  addExercise(homeworkId: number, orderIndex: number, instructionText: string, imageFile?: File | null) {
+  addExercise(homeworkId: number, instructionText: string, imageFile?: File | null) {
   const formData = new FormData();
-  formData.append('orderIndex', String(orderIndex));
   formData.append('instructionText', instructionText);
 
   if (imageFile) {
@@ -96,5 +101,9 @@ export class ApiService {
       `${this.baseUrl}/api/v1/teacher/homeworks/${homeworkId}/assignments`,
       body
     );
+  }
+
+  getStudents() {
+    return this.http.get<StudentResponse[]>(`${this.baseUrl}/api/v1/teacher/students`);
   }
 }
